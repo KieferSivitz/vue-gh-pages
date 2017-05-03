@@ -15,7 +15,12 @@
     "gh-pages",
     "js",
     "npm",
-    "node"
+    "node",
+    "github",
+    "pages",
+    "cli",
+    "vue-cli",
+    "vue-gh-pages"
   ],
   "author": "Kiefer Sivitz",
   "license": "MIT",
