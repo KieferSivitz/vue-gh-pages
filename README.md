@@ -4,7 +4,7 @@ Since I could not find a clean way of deploying vue-cli apps to github pages so 
 
 Install the module
 
-    npm install vue-gh-pages
+    npm install --save vue-gh-pages
 
 Add the following to the script section of your package.json:
 

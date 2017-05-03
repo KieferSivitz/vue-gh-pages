@@ -33,7 +33,6 @@
   "homepage": "https://github.com/KieferSivitz/vue-gh-pages#readme",
   "dependencies": {
     "mkdirp": "^0.5.1",
-    "ncp": "^2.0.0",
-    "rmdir": "^1.2.0"
+    "ncp": "^2.0.0"
   }
 }
