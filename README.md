@@ -4,11 +4,11 @@ Since I could not find a clean way of deploying to gh-pages I made this one
 
 Install the module
 
-    npm install vue-cli-gh-pages
+    npm install vue-gh-pages
 
 Add the following to the script section of your package.json:
 
-    "deploy": "npm run vue-cli-gh-pages start"
+    "deploy": "./node_modules/vue-gh-pages/index.js"
 
 Now when you're ready to push to github run
 
