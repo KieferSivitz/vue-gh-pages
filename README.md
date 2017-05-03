@@ -1,4 +1,4 @@
-## vue-cli-gh-pages
+## vue-gh-pages
 
 Since I could not find a clean way of deploying to gh-pages I made this one
 
