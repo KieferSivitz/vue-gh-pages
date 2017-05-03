@@ -18,7 +18,7 @@
     "node"
   ],
   "author": "Kiefer Sivitz",
-  "license": "ISC",
+  "license": "MIT",
   "bin": {
     "vue-cli-gh-pages": "./index.js"
   },
