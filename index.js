@@ -24,10 +24,6 @@ function editForProduction () {
     })
 }
 
-function writeFile() {
-    var
-}
-
 function runBuild() {
     // Create development build
     console.log('Creating production build (npm run build)');
