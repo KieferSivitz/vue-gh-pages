@@ -11,17 +11,10 @@ function editForProduction () {
 
         var newValue = data.replace('src=/', 'src=');
 
-        fs.writeFile('docs/index.html.bak', newValue, 'utf-8', function (err) {
-            if (err) throw err;
-            fs.readFile('docs/index.html.bak', 'utf-8', function(err, data){
-                if (err) throw err;
-                newValue = data.replace('href=/', 'href=');
-                fs.writeFile('docs/index.html', newValue, 'utf-8', function (err) {
-                    console.log('Finished! production build is ready for gh-pages');
-                });
-            });
-        });
-
+        fs.writeFileSync('docs/index.html.bak', newValue, 'utf-8')
+        fs.readFile('docs/index.html.bak', 'utf-8')
+        newValue = data.replace('href=/', 'href=');
+        fs.writeFileSync('docs/index.html', newValue, 'utf-8');
     })
 }
 
