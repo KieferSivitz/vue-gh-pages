@@ -2,37 +2,26 @@
 var ncp = require('ncp').ncp;
 var fs = require('fs');
 var exec = require('child_process').exec;
+require('shelljs/global');
 
 function editForProduction () {
     console.log('Removing / from href and src tags in docs/index.html');
 
-    fs.readFile('docs/index.html', 'utf-8', function(err, data){
-        if (err) throw err;
 
-        var newValue = data.replace('src=/', 'src=');
+    sed('-i', 'src=/', 'src=', 'docs/index.html');
 
-        fs.writeFile('docs/index.html', newValue, 'utf-8', function (err) {
-            if (err) throw err;
-                fs.readFile('docs/index.html', 'utf-8', function(err, data){
-                if (err) throw err;
-
-                var newValue = data.replace('href=/', 'href=');
-                fs.writeFile('docs/index.html', newValue, 'utf-8', function (err) {
-                    console.log('Finished! production build is ready for gh-pages');
-                });
-            });
-        });
-    })
+    sed('-i', 'href=/', 'href=', 'docs/index.html');
 }
 
 function runBuild() {
     // Create development build
     console.log('Creating production build (npm run build)');
-    child = exec('npm run build', function () {
+
+    exec('npm run build', function () {
          // Move the dist folder to docs for gh-pages
         ncp.limit = 16;
 
-        ncp('dist', 'docs', function (err) {
+        ncp('dist', 'docs', function (err)      {
             if (err) {
                 return console.error(err);
             }else {
@@ -45,8 +34,6 @@ function runBuild() {
             }
         });
     }).stderr.pipe(process.stderr);
-
-
 }
 
 
@@ -61,6 +48,9 @@ if (fs.existsSync('docs')) {
 }else {
     runBuild();
 }
+
+
+
 
 
 
