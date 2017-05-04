@@ -8,8 +8,7 @@ function editForProduction () {
 
     fs.readFile('docs/index.html', 'utf-8', function(err, data){
         if (err) throw err;
-
-        var newValue = data.replace('src=/', 'src=');
+        var newValue = data.replace(/src=\//g, 'src=');
         fs.writeFile('docs/index.html', newValue, 'utf-8', function (err) {
             newValue = data.replace('href=/', 'href=');
             fs.writeFile('docs/index.html', newValue, 'utf-8', function (err) {
