@@ -11,8 +11,7 @@ function editForProduction () {
 
         var newValue = data.replace('src=/', 'src=');
 
-        fs.writeFileSync('docs/index.html.bak', newValue, 'utf-8')
-        fs.readFile('docs/index.html.bak', 'utf-8')
+        fs.writeFileSync('docs/index.html', newValue, 'utf-8');
         newValue = data.replace('href=/', 'href=');
         fs.writeFileSync('docs/index.html', newValue, 'utf-8');
     })
