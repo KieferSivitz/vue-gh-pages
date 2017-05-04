@@ -1,6 +1,6 @@
 {
   "name": "vue-gh-pages",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Automated build tool to update and push vue-cli projects to gh-pages",
   "main": "index.js",
   "scripts": {
