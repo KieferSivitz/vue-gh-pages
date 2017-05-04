@@ -11,12 +11,7 @@ function editForProduction () {
 
         var newValue = data.replace('src=/', 'src=');
 
-        fs.writeFile('docs/index.html', newValue, 'utf-8', function (err) {
-            if (err) throw err;
-            fs.readFile('docs/index.html', 'utf-8', function(err, data){
-                if (err) throw err;
-            });
-        });
+        fs.appendFileSync('docs/index.html', newValue);
     })
 }
 
