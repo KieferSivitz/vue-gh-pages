@@ -2,15 +2,27 @@
 var ncp = require('ncp').ncp;
 var fs = require('fs');
 var exec = require('child_process').exec;
-require('shelljs/global');
 
 function editForProduction () {
     console.log('Removing / from href and src tags in docs/index.html');
 
+    fs.readFile('docs/index.html', 'utf-8', function(err, data){
+        if (err) throw err;
 
-    sed('-i', 'src=/', 'src=', 'docs/index.html');
+        var newValue = data.replace('src=/', ' src=');
 
-    sed('-i', 'href=/', 'href=', 'docs/index.html');
+        fs.writeFile('docs/index.html', newValue, 'utf-8', function (err) {
+            if (err) throw err;
+                fs.readFile('docs/index.html', 'utf-8', function(err, data){
+                if (err) throw err;
+
+                var newValue = data.replace('href=/', 'href=');
+                fs.writeFile('docs/index.html', newValue, 'utf-8', function (err) {
+                    console.log('Finished! production build is ready for gh-pages');
+                });
+            });
+        });
+    })
 }
 
 function runBuild() {
