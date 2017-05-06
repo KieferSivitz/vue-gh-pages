@@ -4,7 +4,7 @@ var fs = require('fs');
 var exec = require('child_process').exec;
 
 function editForProduction () {
-    console.log('Removing / from href and src tags in docs/index.html');
+    console.log('Preparing files for github pages');
 
     fs.readFile('docs/index.html', 'utf-8', function(err, data){
         if (err) throw err;
@@ -36,7 +36,7 @@ function runBuild() {
             if (err) {
                 return console.error(err);
             }else {
-                console.log('Files copied, removing dist folder');
+                console.log('Build Complete.');
                 path = 'dist';
 
                 exec('rm -r ' + path, function (err, stdout, stderr) {
@@ -49,7 +49,7 @@ function runBuild() {
 
 
 
-// Remove existing docs folder if it's there
+// Remove existing docs folder if it exists
 if (fs.existsSync('docs')) {
     var path = 'docs';
 

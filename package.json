@@ -20,7 +20,8 @@
     "pages",
     "cli",
     "vue-cli",
-    "vue-gh-pages"
+    "vue-gh-pages",
+    "github-pages"
   ],
   "author": "Kiefer Sivitz",
   "license": "MIT",
