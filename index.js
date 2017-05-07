@@ -26,7 +26,7 @@ function editForProduction () {
 
 function runBuild() {
     // Create development build
-    console.log('Creating production build (npm run build)');
+    console.log('Creating production build');
 
     exec('npm run build', function () {
          // Move the dist folder to docs for gh-pages
