@@ -8,7 +8,7 @@ Install the module
 
 Add the following to the script section of your package.json:
 
-    "deploy": "./node_modules/vue-gh-pages/index.js"
+    "deploy": "node ./node_modules/vue-gh-pages/index.js"
 
 Now when you're ready to push to github run
 
