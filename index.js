@@ -3,6 +3,15 @@ var ncp = require('ncp').ncp;
 var fs = require('fs');
 var exec = require('child_process').exec;
 
+function copyCNAME () {
+    ncp('CNAME', 'docs/CNAME', function (err)      {
+        if (err) {
+            return console.error(err);
+        }
+        return
+    });
+}
+
 function editForProduction () {
     console.log('Preparing files for github pages');
 
@@ -17,6 +26,9 @@ function editForProduction () {
                 if (err) throw err;
                 newValue = data.replace(/href=\//, 'href=');
                 fs.writeFile('docs/index.html', newValue, 'utf-8', function (err) {
+                    if(fs.existsSync('CNAME')) {
+                        copyCNAME()
+                    }
                     console.log('Finished! production build is ready for gh-pages');
                 });;
             });
