@@ -2,6 +2,7 @@
 var ncp = require('ncp').ncp;
 var fs = require('fs');
 var exec = require('child_process').exec;
+var rimraf = require('rimraf');
 
 function copyCNAME () {
     ncp('CNAME', 'docs/CNAME', function (err)      {
@@ -65,16 +66,9 @@ function runBuild() {
 if (fs.existsSync('docs')) {
     var path = 'docs';
 
-    exec('rm -r ' + path, function (err, stdout, stderr) {
+    rimraf(path, function () {
         runBuild();
     });
 }else {
     runBuild();
 }
-
-
-
-
-
-
-
