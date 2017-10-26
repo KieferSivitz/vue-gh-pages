@@ -40,6 +40,7 @@ This will create an optimized production build of your project ready for github 
     master branch /docs folder
 
 ### If you get any errors about filename lengths, run the following command:
+(May need administrator privileges)
 
     git config --system core.longpaths true
 
