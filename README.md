@@ -21,25 +21,17 @@ This will automatically push your builds to github.
 
 If this is left off you will have to commit and push the changes manually.
 
-### Step 4:  Install gh-pages
-
-    npm install --save gh-pages
-
-Alternatively, with yarn:
-
-    yarn add gh-pages
-
-### Step 5: Now when you're ready to push to github, run:
+### Step 4: Now when you're ready to push to github, run:
 
     npm run deploy
 
 This will create an optimized production build of your project ready for github pages.
 
-### Step 6: Finally, if this is your first commit to gh-pages, go to your repository's settings on github, scroll down to the gh-pages section and change the source to:
+### Step 5: Finally, if this is your first commit to gh-pages, go to your repository's settings on github, scroll down to the gh-pages section and change the source to:
 
     master branch /docs folder
 
-### If you get any errors about filename lengths, run the following command:
+#### If you get any errors about filename lengths, run the following command:
 (May need administrator privileges)
 
     git config --system core.longpaths true
