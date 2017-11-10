@@ -17,7 +17,7 @@ Alternatively, with yarn:
 ### Step 3: Add `homepage` field to your `package.json` file:
 This will automatically push your builds to github.
 
-    "homepage": "https://myusername.github.io/my-app",
+    "homepage": "https://github.com/myusername/my-app",
 
 If this is left off you will have to commit and push the changes manually.
 
