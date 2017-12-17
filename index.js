@@ -68,11 +68,17 @@ function editForProduction () {
     })
 }
 
+function checkIfYarn () {
+    return fs.existsSync(path.resolve('./' || process.cwd(), 'yarn.lock'));
+}
+
 function runBuild () {
     // Create development build
     console.log('Creating production build');
 
-    exec('yarn run build', function () {
+    const packageManagerName = checkIfYarn() ? 'yarn' : 'npm'
+
+    exec(`${packageManagerName} run build`, function () {
         // Move the dist folder to docs for gh-pages
         ncp.limit = 16;
 
