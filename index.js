@@ -58,15 +58,11 @@ function editForProduction () {
                 fs.writeFile('docs/index.html', newValue2, 'utf-8', function (err) {
                     if (err) {
                         console.error(err);
-                    } else {
-                        if (repository !== null) {
-                            pushToGhPages();
-                        }
-                    }
-                });
-            });
-        });
-    })
+                    } 
+				});
+			});
+		});
+	});
 }
 
 function checkIfYarn () {
@@ -101,6 +97,9 @@ function runBuild () {
 						copy404()
 					}
 					editForProduction()
+					if (repository !== null) {
+						pushToGhPages();
+					}
 				}
 			});
 		}
