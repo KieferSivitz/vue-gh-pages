@@ -24,6 +24,7 @@ function pushToGhPages () {
         }
     });
 }
+
 function copy404 () {
     ncp('404.html', 'docs/404.html', function (err) {
         if (err) {
@@ -85,27 +86,27 @@ function runBuild () {
         ncp('dist', 'docs', function (err) {
             if (err) {
                 return console.error(err);
-            } else {
-                console.log('Build Complete.');
-                pathToBuild = 'dist';
-
-                exec('rm -r ' + pathToBuild, function (err, stdout, stderr) {
-                    if (err) {
-                        console.error(err)
-                    } else {
-                        if (fs.existsSync('CNAME')) {
-                            copyCNAME()
-                        }
-                        if (fs.existsSync('404.html')) {
-                            copy404()
-                        }
-                        editForProduction()
-                    }
-                });
             }
-        });
-    }).stderr.pipe(process.stderr);
-}
+			console.log('Build Complete.');
+			pathToBuild = 'dist';
+
+			exec('rm -r ' + pathToBuild, function (err, stdout, stderr) {
+				if (err) {
+					console.error(err)
+				} else {
+					if (fs.existsSync('CNAME')) {
+						copyCNAME()
+					}
+					if (fs.existsSync('404.html')) {
+						copy404()
+					}
+					editForProduction()
+				}
+			});
+		}
+	});
+}).stderr.pipe(process.stderr);
+
 
 
 
