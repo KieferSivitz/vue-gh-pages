@@ -19,8 +19,8 @@ function pushToGhPages () {
             console.log('Push to remote failed, please double check that the homepage field in your package.json links to the correct repository.')
             console.log('The build has completed but has not been pushed to github.')
         } else {
-            console.log('Pushed to gh-pages branch')
             console.log('Finished! production build is ready for gh-pages');
+            console.log('Pushed to gh-pages branch')
         }
     });
 }
@@ -58,7 +58,11 @@ function editForProduction () {
                 fs.writeFile('docs/index.html', newValue2, 'utf-8', function (err) {
                     if (err) {
                         console.error(err);
-                    } 
+                    } else {
+                        if (repository !== null) {
+                            pushToGhPages();
+                        }
+                    }
 				});
 			});
 		});
@@ -83,33 +87,26 @@ function runBuild () {
             if (err) {
                 return console.error(err);
             }
-			console.log('Build Complete.');
-			pathToBuild = 'dist';
+            console.log('Build Complete.');
+            const pathToBuild = 'dist';
 
-			exec('rm -r ' + pathToBuild, function (err, stdout, stderr) {
-				if (err) {
-					console.error(err)
-				} else {
-					if (fs.existsSync('CNAME')) {
-						copyCNAME()
-					}
-					if (fs.existsSync('404.html')) {
-						copy404()
-					}
-					editForProduction()
-					if (repository !== null) {
-						pushToGhPages();
-					}
-				}
-			});
-		}
-	});
-}).stderr.pipe(process.stderr);
+            exec('rm -r ' + pathToBuild, function (err, stdout, stderr) {
+                if (err) {
+                    console.error(err)
+                } else {
+                    if (fs.existsSync('CNAME')) {
+                        copyCNAME()
+                    }
+                    if (fs.existsSync('404.html')) {
+                        copy404()
+                    }
+                    editForProduction()
+                }
+            });
+        });
+    }).stderr.pipe(process.stderr);
+}
 
-
-
-
-// Remove existing docs folder if it exists
 if (fs.existsSync('docs')) {
     let pathToDocs = 'docs';
 
