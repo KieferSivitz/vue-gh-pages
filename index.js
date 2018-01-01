@@ -63,10 +63,10 @@ function editForProduction () {
                             pushToGhPages();
                         }
                     }
-				});
-			});
-		});
-	});
+                });
+            });
+        });
+    });
 }
 
 function checkIfYarn () {
@@ -74,13 +74,11 @@ function checkIfYarn () {
 }
 
 function runBuild () {
-    // Create development build
     console.log('Creating production build');
 
     const packageManagerName = checkIfYarn() ? 'yarn' : 'npm'
 
     exec(`${packageManagerName} run build`, function () {
-        // Move the dist folder to docs for gh-pages
         ncp.limit = 16;
 
         ncp('dist', 'docs', function (err) {
