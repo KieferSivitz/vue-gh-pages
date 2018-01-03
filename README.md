@@ -4,7 +4,7 @@
 
 ## vue-gh-pages
 
-Since I could not find a clean way of deploying vue-cli apps to github pages so I made this one.
+Since I could not find a clean way of deploying vue-cli apps to github pages, I made this one.
 
 ### Step 1: Install the module:
 
