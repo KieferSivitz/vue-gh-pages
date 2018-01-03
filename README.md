@@ -1,3 +1,6 @@
+[![npm version]](https://www.npmjs.com/package/vue-gh-pages)
+[![Downloads]](https://www.npmjs.com/package/vue-gh-pages)
+
 ## vue-gh-pages
 
 Since I could not find a clean way of deploying vue-cli apps to github pages so I made this one.
