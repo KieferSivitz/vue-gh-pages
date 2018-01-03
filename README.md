@@ -1,5 +1,5 @@
-[![npm version]](https://www.npmjs.com/package/vue-gh-pages)
-[![Downloads]](https://www.npmjs.com/package/vue-gh-pages)
+[![npm version](https://badge.fury.io/js/vue-gh-pages.svg)](https://www.npmjs.com/package/vue-gh-pages)
+[![Downloads](https://badge.fury.io/js/vue-gh-pages.svg)](https://www.npmjs.com/package/vue-gh-pages)
 
 ## vue-gh-pages
 
