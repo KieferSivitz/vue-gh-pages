@@ -7,6 +7,7 @@ var ghpages = require('gh-pages');
 var path = require('path');
 var packageJson = require('../../package.json')
 var repository = packageJson['homepage'] || null
+var isWin = require('os').platform().indexOf('win') > -1;
 
 function pushToGhPages () {
     ghpages.publish('docs', {
@@ -74,11 +75,13 @@ function checkIfYarn () {
 }
 
 function runBuild () {
-    console.log('Creating production build');
+    // Create development build
+    console.log('Creating production build...');
 
     const packageManagerName = checkIfYarn() ? 'yarn' : 'npm'
 
     exec(`${packageManagerName} run build`, function () {
+        // Move the dist folder to docs for gh-pages
         ncp.limit = 16;
 
         ncp('dist', 'docs', function (err) {
@@ -87,8 +90,11 @@ function runBuild () {
             }
             console.log('Build Complete.');
             const pathToBuild = 'dist';
-
-            exec('rm -r ' + pathToBuild, function (err, stdout, stderr) {
+            var removeDist = 'rm -r ' + pathToBuild;
+            if (isWin) {
+                removeDist = 'rd /s /q "' + pathToBuild + '"';
+            }
+            exec(removeDist, function (err, stdout, stderr) {
                 if (err) {
                     console.error(err)
                 } else {
@@ -106,7 +112,7 @@ function runBuild () {
 }
 
 if (fs.existsSync('docs')) {
-    let pathToDocs = 'docs';
+    var pathToDocs = 'docs';
 
     rimraf(pathToDocs, function () {
         runBuild();
