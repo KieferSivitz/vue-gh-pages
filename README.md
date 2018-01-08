@@ -23,6 +23,10 @@ This will automatically push your builds to github.
 
     "homepage": "https://github.com/myusername/my-app",
 
+    if you are using ssh you will need to add the ssh link:
+
+    "homepage": "git@github.com:myusername/my-app
+
 If this is left off you will have to commit and push the changes manually.
 
 ### Step 4: Now when you're ready to push to github, run:
