@@ -76,7 +76,7 @@ function checkIfYarn () {
 
 function runBuild () {
     // Create development build
-    console.log('Creating production build');
+    console.log('Creating production build...');
 
     const packageManagerName = checkIfYarn() ? 'yarn' : 'npm'
 
@@ -90,7 +90,7 @@ function runBuild () {
             }
             console.log('Build Complete.');
             const pathToBuild = 'dist';
-            let removeDist = 'rm -r ' + pathToBuild;
+            var removeDist = 'rm -r ' + pathToBuild;
             if (isWin) {
                 removeDist = 'rd /s /q "' + pathToBuild + '"';
             }
@@ -112,7 +112,7 @@ function runBuild () {
 }
 
 if (fs.existsSync('docs')) {
-    let pathToDocs = 'docs';
+    var pathToDocs = 'docs';
 
     rimraf(pathToDocs, function () {
         runBuild();
