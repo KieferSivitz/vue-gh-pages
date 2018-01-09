@@ -7,7 +7,7 @@ var ghpages = require('gh-pages');
 var path = require('path');
 var packageJson = require('../../package.json')
 var repository = packageJson['homepage'] || null
-var isWin = require('os').platform().indexOf('win') > -1;
+var isWin = require('os').platform().indexOf('win') == 0;
 
 function pushToGhPages () {
     ghpages.publish('docs', {
