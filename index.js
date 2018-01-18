@@ -83,7 +83,7 @@ function runBuild () {
             console.log('Build Complete.');
             const pathToBuild = 'dist';
             // The following is replaced win rimraf in an async/await rewrite on the beta branch
-            rimraf(pathToDocs, function () {
+            rimraf(pathToBuild, function () {
                 if (fs.existsSync('CNAME')) {
                     copyCNAME()
                 }
