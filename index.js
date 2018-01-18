@@ -49,22 +49,19 @@ function editForProduction () {
     fs.readFile('docs/index.html', 'utf-8', function (err, data) {
         if (err) throw err;
 
-        var newValue = data.replace(/src=\//g, 'src=');
+        var replace_src_tags = data.replace(/src=\//g, 'src=');
 
-        fs.writeFile('docs/index.html', newValue, 'utf-8', function (err) {
+        fs.writeFile('docs/index.html', replace_src_tags, 'utf-8', function (err) {
             if (err) throw err;
-            fs.readFile('docs/index.html', 'utf-8', function (err, data) {
-                if (err) throw err;
-                var newValue2 = data.replace(/href=\//g, 'href=');
-                fs.writeFile('docs/index.html', newValue2, 'utf-8', function (err) {
-                    if (err) {
-                        console.error(err);
-                    } else {
-                        if (repository !== null) {
-                            pushToGhPages();
-                        }
+            var replace_href_tags = data.replace(/href=\//g, 'href=');
+            fs.writeFile('docs/index.html', replace_href_tags, 'utf-8', function (err) {
+                if (err) {
+                    console.error(err);
+                } else {
+                    if (repository !== null) {
+                        pushToGhPages();
                     }
-                });
+                }
             });
         });
     });
