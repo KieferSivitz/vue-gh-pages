@@ -45,7 +45,7 @@ function copyCNAME () {
 
 function editForProduction () {
     console.log('Preparing files for github pages');
-    let docsIndex = require('docs/index.html')
+    var docsIndex = require('docs/index.html')
 
     var replace_href_tags = data.replace(/href=\//g, 'href=');
     var replace_src_tags = data.replace(/src=\//g, 'src=');
