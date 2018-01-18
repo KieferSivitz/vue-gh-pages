@@ -55,7 +55,7 @@ function editForProduction () {
             if (err) throw err;
             fs.readFile('docs/index.html', 'utf-8', function (err, data) {
                 if (err) throw err;
-                var newValue2 = data.replace(/href=\//, 'href=');
+                var newValue2 = data.replace(/href=\//g, 'href=');
                 fs.writeFile('docs/index.html', newValue2, 'utf-8', function (err) {
                     if (err) {
                         console.error(err);
@@ -75,13 +75,11 @@ function checkIfYarn () {
 }
 
 function runBuild () {
-    // Create development build
     console.log('Creating production build...');
 
     const packageManagerName = checkIfYarn() ? 'yarn' : 'npm'
 
     exec(`${packageManagerName} run build`, function () {
-        // Move the dist folder to docs for gh-pages
         ncp.limit = 16;
 
         ncp('dist', 'docs', function (err) {
@@ -90,6 +88,7 @@ function runBuild () {
             }
             console.log('Build Complete.');
             const pathToBuild = 'dist';
+            // The following is replaced win rimraf in an async/await rewrite on the beta branch
             var removeDist = 'rm -r ' + pathToBuild;
             if (isWin) {
                 removeDist = 'rd /s /q "' + pathToBuild + '"';
