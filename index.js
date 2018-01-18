@@ -83,22 +83,20 @@ function runBuild () {
             console.log('Build Complete.');
             const pathToBuild = 'dist';
             // The following is replaced win rimraf in an async/await rewrite on the beta branch
-            var removeDist = 'rm -r ' + pathToBuild;
-            if (isWin) {
-                removeDist = 'rd /s /q "' + pathToBuild + '"';
-            }
-            exec(removeDist, function (err, stdout, stderr) {
-                if (err) {
-                    console.error(err)
-                } else {
-                    if (fs.existsSync('CNAME')) {
-                        copyCNAME()
+            rimraf(pathToDocs, function () {
+                exec(removeDist, function (err, stdout, stderr) {
+                    if (err) {
+                        console.error(err)
+                    } else {
+                        if (fs.existsSync('CNAME')) {
+                            copyCNAME()
+                        }
+                        if (fs.existsSync('404.html')) {
+                            copy404()
+                        }
+                        editForProduction()
                     }
-                    if (fs.existsSync('404.html')) {
-                        copy404()
-                    }
-                    editForProduction()
-                }
+                });
             });
         });
     }).stderr.pipe(process.stderr);
