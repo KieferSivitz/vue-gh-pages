@@ -75,13 +75,11 @@ function checkIfYarn () {
 }
 
 function runBuild () {
-    // Create development build
     console.log('Creating production build...');
 
     const packageManagerName = checkIfYarn() ? 'yarn' : 'npm'
 
     exec(`${packageManagerName} run build`, function () {
-        // Move the dist folder to docs for gh-pages
         ncp.limit = 16;
 
         ncp('dist', 'docs', function (err) {
@@ -90,6 +88,7 @@ function runBuild () {
             }
             console.log('Build Complete.');
             const pathToBuild = 'dist';
+            // The following is replaced win rimraf in an async/await rewrite on the beta branch
             var removeDist = 'rm -r ' + pathToBuild;
             if (isWin) {
                 removeDist = 'rd /s /q "' + pathToBuild + '"';
