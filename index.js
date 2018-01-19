@@ -6,8 +6,7 @@ var rimraf = require('rimraf');
 var ghpages = require('gh-pages');
 var path = require('path');
 var packageJson = require('../../package.json')
-var repository = packageJson['homepage'] || null
-var isWin = require('os').platform().indexOf('win') == 0;
+var repository = packageJson['homepage'] || null 
 
 function pushToGhPages () {
     ghpages.publish('docs', {
@@ -47,24 +46,18 @@ function editForProduction () {
     console.log('Preparing files for github pages');
 
     fs.readFile('docs/index.html', 'utf-8', function (err, data) {
-        if (err) throw err;
-
         var replace_href_tags = data.replace(/href=\//g, 'href=');
         var replace_src_tags = data.replace(/src=\//g, 'src=');
-
         fs.writeFile('docs/index.html', replace_src_tags, 'utf-8', function (err) {
             if (err) throw err;
-            fs.readFile('docs/index.html', 'utf-8', function (err, data) {
-                if (err) throw err;
-                fs.writeFile('docs/index.html', replace_href_tags, 'utf-8', function (err) {
-                    if (err) {
-                        console.error(err);
-                    } else {
-                        if (repository !== null) {
-                            pushToGhPages();
-                        }
+            fs.writeFile('docs/index.html', replace_href_tags, 'utf-8', function (err) {
+                if (err) {
+                    console.error(err);
+                } else {
+                    if (repository !== null) {
+                        pushToGhPages();
                     }
-                });
+                }
             });
         });
     });
@@ -88,23 +81,14 @@ function runBuild () {
             }
             console.log('Build Complete.');
             const pathToBuild = 'dist';
-            // The following is replaced win rimraf in an async/await rewrite on the beta branch
-            var removeDist = 'rm -r ' + pathToBuild;
-            if (isWin) {
-                removeDist = 'rd /s /q "' + pathToBuild + '"';
-            }
-            exec(removeDist, function (err, stdout, stderr) {
-                if (err) {
-                    console.error(err)
-                } else {
-                    if (fs.existsSync('CNAME')) {
-                        copyCNAME()
-                    }
-                    if (fs.existsSync('404.html')) {
-                        copy404()
-                    }
-                    editForProduction()
+            rimraf(pathToBuild, function () {
+                if (fs.existsSync('CNAME')) {
+                    copyCNAME()
                 }
+                if (fs.existsSync('404.html')) {
+                    copy404()
+                }
+                editForProduction()
             });
         });
     }).stderr.pipe(process.stderr);
