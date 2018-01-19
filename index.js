@@ -46,6 +46,8 @@ function editForProduction () {
     console.log('Preparing files for github pages');
 
     fs.readFile('docs/index.html', 'utf-8', function (err, data) {
+        if (err) throw err;
+
         let replace_src_tags = data.replace(/src=\//g, 'src=');
         let replace_href_tags = data.replace(/href=\//g, 'href=');
         fs.writeFile('docs/index.html', replace_src_tags, 'utf-8', function (err) {
