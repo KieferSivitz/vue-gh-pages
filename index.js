@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-var ncp = require('ncp').ncp;
-var fs = require('fs');
-var exec = require('child_process').exec;
-var rimraf = require('rimraf');
-var ghpages = require('gh-pages');
-var path = require('path');
-var packageJson = require('../../package.json')
-var repository = packageJson['homepage'] || null 
+let ncp = require('ncp').ncp;
+let fs = require('fs');
+let exec = require('child_process').exec;
+let rimraf = require('rimraf');
+let ghpages = require('gh-pages');
+let path = require('path');
+let packageJson = require('../../package.json')
+let repository = packageJson['homepage'] || null 
 
 function pushToGhPages () {
     ghpages.publish('docs', {
@@ -46,8 +46,8 @@ function editForProduction () {
     console.log('Preparing files for github pages');
 
     fs.readFile('docs/index.html', 'utf-8', function (err, data) {
-        var replace_src_tags = data.replace(/src=\//g, 'src=');
-        var replace_href_tags = data.replace(/href=\//g, 'href=');
+        let replace_src_tags = data.replace(/src=\//g, 'src=');
+        let replace_href_tags = data.replace(/href=\//g, 'href=');
         fs.writeFile('docs/index.html', replace_src_tags, 'utf-8', function (err) {
             if (err) throw err;
             fs.writeFile('docs/index.html', replace_href_tags, 'utf-8', function (err) {
@@ -95,7 +95,7 @@ function runBuild () {
 }
 
 if (fs.existsSync('docs')) {
-    var pathToDocs = 'docs';
+    const pathToDocs = 'docs';
 
     rimraf(pathToDocs, function () {
         runBuild();
