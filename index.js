@@ -46,7 +46,7 @@ function copyCNAME () {
 function editForProduction () {
     console.log('Preparing files for github pages');
 
-    fs.readFile('docs/index.html', 'utf-8', function () {
+    fs.readFile('docs/index.html', 'utf-8', function (err, data) {
         var replace_href_tags = data.replace(/href=\//g, 'href=');
         var replace_src_tags = data.replace(/src=\//g, 'src=');
         fs.writeFile('docs/index.html', replace_src_tags, 'utf-8', function (err) {
