@@ -6,8 +6,7 @@ var rimraf = require('rimraf');
 var ghpages = require('gh-pages');
 var path = require('path');
 var packageJson = require('../../package.json')
-var repository = packageJson['homepage'] || null
-var isWin = require('os').platform().indexOf('win') == 0;
+var repository = packageJson['homepage'] || null 
 
 function pushToGhPages () {
     ghpages.publish('docs', {
