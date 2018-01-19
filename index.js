@@ -50,18 +50,9 @@ function editForProduction () {
 
         let replace_src_tags = data.replace(/src=\//g, 'src=');
         let replace_href_tags = data.replace(/href=\//g, 'href=');
-        fs.writeFile('docs/index.html', replace_src_tags, 'utf-8', function (err) {
-            if (err) throw err;
-            fs.writeFile('docs/index.html', replace_href_tags, 'utf-8', function (err) {
-                if (err) {
-                    console.error(err);
-                } else {
-                    if (repository !== null) {
-                        pushToGhPages();
-                    }
-                }
-            });
-        });
+        fs.writeFileSync('docs/index.html', replace_src_tags)
+        fs.writeFileSync('docs/index.html', replace_href_tags)
+        if (repository !== null) { pushToGhPages(); }
     });
 }
 
