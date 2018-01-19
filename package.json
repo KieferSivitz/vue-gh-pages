@@ -21,12 +21,13 @@
     "cli",
     "vue-cli",
     "vue-gh-pages",
-    "github-pages"
+    "github-pages",
+    "github pages"
   ],
   "author": "Kiefer Sivitz",
   "license": "MIT",
   "bin": {
-    "vue-cli-gh-pages": "./index.js"
+    "vue-gh-pages": "./index.js"
   },
   "bugs": {
     "url": "https://github.com/KieferSivitz/vue-gh-pages/issues"
