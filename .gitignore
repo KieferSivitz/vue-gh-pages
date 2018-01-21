@@ -1,5 +1,8 @@
 node_modules
 
+#configuration
+.eslintrc.json
+
 # debug
 npm-debug.log
 
