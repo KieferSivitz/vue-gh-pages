@@ -1,3 +1,12 @@
-yarn.lock
-npm-debug.log
 node_modules
+
+# debug
+npm-debug.log
+
+# lock
+package-lock.json
+yarn.lock
+
+# swap
+*.sw*
+
