@@ -55,7 +55,7 @@ function runBuild () {
 
     const packageManagerName = checkIfYarn() ? 'yarn' : 'npm'
 
-    execSync(`${packageManagerName} run build`);
+    execSync(`${packageManagerName} run build`, {stdio:[0,1,2]});
 
     copyFiles('dist', 'docs', function () {
         console.log('Build Complete.');
