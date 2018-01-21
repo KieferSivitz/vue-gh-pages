@@ -48,8 +48,8 @@ function editForProduction () {
     fs.readFile('docs/index.html', 'utf-8', function (err, data) {
         if (err) throw err;
 
-        let replace_hred_and_src_tags.replace(/(src|href)=\//g, '$1=')
-        fs.writeFileSync('docs/index.html', replace_hred_and_src_tags)
+        let replace_href_and_src_tags = data.replace(/(src|href)=\//g, '$1=')
+        fs.writeFileSync('docs/index.html', replace_href_and_src_tags)
 
         if (repository !== null) { pushToGhPages(); }
     });
