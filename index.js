@@ -29,7 +29,7 @@ function pushToGhPages () {
 function copyFiles (originalFile, newFile, callbck) {
     ncp(originalFile, newFile, function (err) {
         if (err) { return console.error(err); }
-        callback();
+        if (callback) { callback(); }
     });
 }
 
