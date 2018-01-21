@@ -26,11 +26,11 @@ function pushToGhPages () {
     });
 }
 
-function copyFiles (originalFile, newFile, callbck) {
+function copyFiles (originalFile, newFile, callback) {
     ncp.limit = 16;
     ncp(originalFile, newFile, function (err) {
         if (err) { return console.error(err); }
-        if (callback) { callback(); }
+        if (typeof(callback) !== "undefined") { callback(); }
     });
 }
 
