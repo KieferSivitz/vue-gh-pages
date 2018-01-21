@@ -40,8 +40,10 @@ function editForProduction () {
     fs.readFile('docs/index.html', 'utf-8', function (err, data) {
         if (err) { return console.error(err); }
 
-        let replace_href_and_src_tags = data.replace(/(src|href)=\//g, '$1=');
-        fs.writeFileSync('docs/index.html', replace_href_and_src_tags);
+        let replace_src_tags = data.replace(/src=\//g, 'src=');
+        let replace_href_tags = data.replace(/href=\//g, 'href=');
+        fs.writeFileSync('docs/index.html', replace_src_tags)
+        fs.writeFileSync('docs/index.html', replace_href_tags)
         if (repository !== null) { pushToGhPages(); }
     });
 }
