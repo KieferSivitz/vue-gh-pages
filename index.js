@@ -18,6 +18,7 @@ function pushToGhPages () {
         if (err) {
             console.log('Push to remote failed, please double check that the homepage field in your package.json links to the correct repository.')
             console.log('The build has completed but has not been pushed to github.')
+            return console.error(err);
         } else {
             console.log('Finished! production build is ready for gh-pages');
             console.log('Pushed to gh-pages branch')
@@ -25,28 +26,18 @@ function pushToGhPages () {
     });
 }
 
-function copy404 () {
-    ncp('404.html', 'docs/404.html', function (err) {
-        if (err) {
-            console.error(err);
-        }
+function copyFiles (originalFile, newFile, callbck) {
+    ncp(originalFile, newFile, function (err) {
+        if (err) { return console.error(err); }
+        callback();
     });
 }
-
-function copyCNAME () {
-    ncp('CNAME', 'docs/CNAME', function (err) {
-        if (err) {
-            console.error(err);
-        }
-    });
-}
-
 
 function editForProduction () {
     console.log('Preparing files for github pages');
 
     fs.readFile('docs/index.html', 'utf-8', function (err, data) {
-        if (err) throw err;
+        if (err) { return console.error(err); }
 
         let replace_src_tags = data.replace(/src=\//g, 'src=');
         let replace_href_tags = data.replace(/href=\//g, 'href=');
@@ -68,18 +59,15 @@ function runBuild () {
     exec(`${packageManagerName} run build`, function () {
         ncp.limit = 16;
 
-        ncp('dist', 'docs', function (err) {
-            if (err) {
-                return console.error(err);
-            }
+        copyFiles('dist', 'docs', function () {
             console.log('Build Complete.');
             const pathToBuild = 'dist';
             rimraf(pathToBuild, function () {
                 if (fs.existsSync('CNAME')) {
-                    copyCNAME()
+                    copyFiles('CNAME', 'docs/CNAME')
                 }
                 if (fs.existsSync('404.html')) {
-                    copy404()
+                    copyFiles('404.html', 'docs/404.html')
                 }
                 editForProduction()
             });
