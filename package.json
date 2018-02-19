@@ -1,6 +1,6 @@
 {
   "name": "vue-gh-pages",
-  "version": "1.7.6",
+  "version": "1.8.8",
   "description": "Automated build tool to update and push vue-cli projects to gh-pages",
   "main": "index.js",
   "scripts": {
@@ -21,12 +21,13 @@
     "cli",
     "vue-cli",
     "vue-gh-pages",
-    "github-pages"
+    "github-pages",
+    "github pages"
   ],
   "author": "Kiefer Sivitz",
   "license": "MIT",
   "bin": {
-    "vue-cli-gh-pages": "./index.js"
+    "vue-gh-pages": "./index.js"
   },
   "bugs": {
     "url": "https://github.com/KieferSivitz/vue-gh-pages/issues"
@@ -34,7 +35,6 @@
   "homepage": "https://github.com/KieferSivitz/vue-gh-pages#readme",
   "dependencies": {
     "gh-pages": "^1.0.0",
-    "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
     "rimraf": "^2.6.1"
   }

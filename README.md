@@ -8,7 +8,7 @@ Since I could not find a clean way of deploying vue-cli apps to github pages, I 
 
 ### Step 1: Install the module:
 
-    npm install --save vue-gh-pages
+    npm install --save-dev vue-gh-pages
 
 Alternatively, with yarn:
 
@@ -49,7 +49,3 @@ This may happen as a result of node_modules filenames being overly verbose.
 
 That's it!
 
-##### Note
-If you'd like to try the version using async/await you can install with vue-gh-pages@beta
-
-It should be less fragile than the current build, but I still need to test and I'm not sure when to break applications on older versions of node.
