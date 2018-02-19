@@ -10,20 +10,20 @@ let repository = packageJson['homepage'] || null;
 
 function pushToGhPages () {
     ghpages.publish('docs', {
-        branch: 'master',
-        dest: 'docs',
-        repo: repository + '.git'
-    },
-    function (err) {
-        if (err) {
-            console.log('Push to remote failed, please double check that the homepage field in your package.json links to the correct repository.');
-            console.log('The build has completed but has not been pushed to github.');
-            return console.error(err);
-        } else {
-            console.log('Finished! production build is ready for gh-pages');
-            console.log('Pushed to gh-pages branch');
-        }
-    });
+            branch: 'master',
+            dest: 'docs',
+            repo: repository + '.git'
+        },
+        function (err) {
+            if (err) {
+                console.log('Push to remote failed, please double check that the homepage field in your package.json links to the correct repository.');
+                console.log('The build has completed but has not been pushed to github.');
+                return console.error(err);
+            } else {
+                console.log('Finished! production build is ready for gh-pages');
+                console.log('Pushed to gh-pages branch');
+            }
+        });
 }
 
 function copyFiles (originalFile, newFile, callback) {
@@ -40,7 +40,7 @@ function editForProduction () {
     fs.readFile('docs/index.html', 'utf-8', function (err, data) {
         if (err) { return console.error(err); }
 
-        let replace_href_and_src_tags = data.replace(/(src|href)=\//g, '$1=');
+        let replace_href_and_src_tags = data.replace(/(src|href)=\//g, '$1=')
         fs.writeFileSync('docs/index.html', replace_href_and_src_tags);
 
         if (repository !== null) { pushToGhPages(); }
@@ -67,8 +67,7 @@ function runBuild () {
                     copyFiles(file, `docs/${file}`);
                 }
             });
-            
-            editForProduction()
+            editForProduction();
         });
     });
 }
