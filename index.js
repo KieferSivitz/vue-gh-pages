@@ -29,7 +29,7 @@ function pushToGhPages() {
     );
 }
 
-function copyFiles (originalFile, newFile, callback) {
+function copyFiles(originalFile, newFile, callback) {
     ncp.limit = 16;
     ncp(originalFile, newFile, function(error) {
         if (error) {
@@ -41,7 +41,7 @@ function copyFiles (originalFile, newFile, callback) {
     });
 }
 
-function editForProduction () {
+function editForProduction() {
     console.log("Preparing files for github pages");
     fs.readFile("docs/index.html", "utf-8", function(error, data) {
         if (error) {
@@ -55,11 +55,11 @@ function editForProduction () {
     });
 }
 
-function checkIfYarn () {
+function checkIfYarn() {
     return fs.existsSync(path.resolve("./" || process.cwd(), "yarn.lock"));
 }
 
-function runBuild () {
+function runBuild() {
     const packageManagerName = checkIfYarn() ? "yarn" : "npm";
     execSync(`${packageManagerName} run build`, { "stdio": [0, 1, 2] });
     copyFiles("dist", "docs", function() {
@@ -79,7 +79,7 @@ function runBuild () {
 
 if (fs.existsSync("docs")) {
     const pathToDocs = "docs";
-    rimraf(pathToDocs, function () {
+    rimraf(pathToDocs, function() {
         runBuild();
     });
 } else {
