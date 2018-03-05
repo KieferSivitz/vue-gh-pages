@@ -11,6 +11,8 @@ const path = require("path");
 const repository = packageJson["homepage"] || null;
 const rimraf = require("rimraf");
 
+console.time('Deployment Time');
+
 function pushToGhPages() {
     ghpages.publish("docs", {
             "branch": "master",
@@ -23,10 +25,19 @@ function pushToGhPages() {
                 console.log("The build has completed but has not been pushed to github.");
                 return console.error(error);
             }
-            console.log("Finished! production build is ready for gh-pages");
-            console.log("Pushed to gh-pages branch");
+            console.log("The production build is ready and has been pushed to gh-pages branch.");
+            removeDocsDirectory();
         }
     );
+}
+
+function removeDocsDirectory(){
+    rimraf('docs', function(){
+        console.log('________________________________________________________________________________________________________');
+        console.log('Deployment complete. Check Master branch for docs directory.  The local docs directory has been removed.');
+        console.log('‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾');
+        console.timeEnd('Deployment Time');
+    })
 }
 
 function copyFiles(originalFile, newFile, callback) {
