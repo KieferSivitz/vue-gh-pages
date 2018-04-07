@@ -9,6 +9,7 @@ const ncp = require("ncp").ncp;
 const packageJson = require("../../package.json");
 const path = require("path");
 const repository = packageJson["homepage"] || null;
+const webpackSimpleTemplate = packageJson["wst"] || null;
 const rimraf = require("rimraf");
 
 console.time('Deployment Time');
@@ -62,7 +63,11 @@ function editForProduction() {
             return console.error(error);
         }
         const removeLeadingSlash = data.replace(/(src|href)=\//g, "$1=");
-        fs.writeFileSync("docs/index.html", removeLeadingSlash);
+        let removeWebpackSimpleTemplate = removeLeadingSlash;
+        if (webpackSimpleTemplate) {
+            removeWebpackSimpleTemplate = data.replace(webpackSimpleTemplate, "");
+        } 
+        fs.writeFileSync("docs/index.html", removeWebpackSimpleTemplate);
         if (repository !== null) {
             pushToGhPages();
         }
