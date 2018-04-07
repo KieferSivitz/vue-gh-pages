@@ -54,7 +54,7 @@ function copyFiles(originalFile, newFile, callback) {
 
 function editForProduction() {
     console.log("Preparing files for github pages");
-    if (!fs.exists("docs/index.html")) {
+    if (!fs.existsSync("docs/index.html")) {
         fs.createReadStream("index.html").pipe(fs.createWriteStream("docs/index.html"));
     } 
     fs.readFile("docs/index.html", "utf-8", function(error, data) {
