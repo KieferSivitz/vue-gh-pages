@@ -1,3 +1,15 @@
-yarn.lock
-npm-debug.log
 node_modules
+
+# configuration
+.eslintrc.json
+
+# debug
+npm-debug.log
+
+# lock
+package-lock.json
+yarn.lock
+
+# swap
+*.sw*
+

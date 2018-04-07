@@ -1,96 +1,96 @@
 #!/usr/bin/env node
-let ncp = require('ncp').ncp;
-let fs = require('fs');
-let exec = require('child_process').exec;
-let rimraf = require('rimraf');
-let ghpages = require('gh-pages');
-let path = require('path');
-let packageJson = require('../../package.json')
-let repository = packageJson['homepage'] || null 
 
-function pushToGhPages () {
-    ghpages.publish('docs', {
-        branch: 'master',
-        dest: 'docs',
-        repo: repository + '.git'
-    },
-    function (err) {
-        if (err) {
-            console.log('Push to remote failed, please double check that the homepage field in your package.json links to the correct repository.')
-            console.log('The build has completed but has not been pushed to github.')
-        } else {
-            console.log('Finished! production build is ready for gh-pages');
-            console.log('Pushed to gh-pages branch')
-        }
-    });
-}
+"use strict";
 
-function copy404 () {
-    ncp('404.html', 'docs/404.html', function (err) {
-        if (err) {
-            console.error(err);
-        }
-    });
-}
+const execSync = require("child_process").execSync;
+const fs = require("fs");
+const ghpages = require("gh-pages");
+const ncp = require("ncp").ncp;
+const packageJson = require("../../package.json");
+const path = require("path");
+const repository = packageJson["homepage"] || null;
+const rimraf = require("rimraf");
 
-function copyCNAME () {
-    ncp('CNAME', 'docs/CNAME', function (err) {
-        if (err) {
-            console.error(err);
-        }
-    });
-}
+console.time('Deployment Time');
 
-
-function editForProduction () {
-    console.log('Preparing files for github pages');
-
-    fs.readFile('docs/index.html', 'utf-8', function (err, data) {
-        if (err) throw err;
-
-        let replace_src_tags = data.replace(/src=\//g, 'src=');
-        let replace_href_tags = data.replace(/href=\//g, 'href=');
-        fs.writeFileSync('docs/index.html', replace_src_tags)
-        fs.writeFileSync('docs/index.html', replace_href_tags)
-        if (repository !== null) { pushToGhPages(); }
-    });
-}
-
-function checkIfYarn () {
-    return fs.existsSync(path.resolve('./' || process.cwd(), 'yarn.lock'));
-}
-
-function runBuild () {
-    console.log('Creating production build...');
-
-    const packageManagerName = checkIfYarn() ? 'yarn' : 'npm'
-
-    exec(`${packageManagerName} run build`, function () {
-        ncp.limit = 16;
-
-        ncp('dist', 'docs', function (err) {
-            if (err) {
-                return console.error(err);
+function pushToGhPages() {
+    ghpages.publish("docs", {
+            "branch": "master",
+            "dest": "docs",
+            "repo": repository + ".git"
+        },
+        function(error) {
+            if (error) {
+                console.log("Push to remote failed, please double check that the homepage field in your package.json links to the correct repository.");
+                console.log("The build has completed but has not been pushed to github.");
+                return console.error(error);
             }
-            console.log('Build Complete.');
-            const pathToBuild = 'dist';
-            rimraf(pathToBuild, function () {
-                if (fs.existsSync('CNAME')) {
-                    copyCNAME()
-                }
-                if (fs.existsSync('404.html')) {
-                    copy404()
-                }
-                editForProduction()
-            });
-        });
-    }).stderr.pipe(process.stderr);
+            console.log("The production build is ready and has been pushed to gh-pages branch.");
+            removeDocsDirectory();
+        }
+    );
 }
 
-if (fs.existsSync('docs')) {
-    const pathToDocs = 'docs';
+function removeDocsDirectory(){
+    rimraf('docs', function(){
+        console.log('________________________________________________________________________________________________________');
+        console.log('Deployment complete. Check Master branch for docs directory.  The local docs directory has been removed.');
+        console.log('‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾');
+        console.timeEnd('Deployment Time');
+    })
+}
 
-    rimraf(pathToDocs, function () {
+function copyFiles(originalFile, newFile, callback) {
+    ncp.limit = 16;
+    ncp(originalFile, newFile, function(error) {
+        if (error) {
+            return console.error(error);
+        }
+        if (typeof(callback) !== "undefined") {
+            return callback();
+        }
+    });
+}
+
+function editForProduction() {
+    console.log("Preparing files for github pages");
+    fs.readFile("docs/index.html", "utf-8", function(error, data) {
+        if (error) {
+            return console.error(error);
+        }
+        const removeLeadingSlash = data.replace(/(src|href)=\//g, "$1=");
+        fs.writeFileSync("docs/index.html", removeLeadingSlash);
+        if (repository !== null) {
+            pushToGhPages();
+        }
+    });
+}
+
+function checkIfYarn() {
+    return fs.existsSync(path.resolve("./" || process.cwd(), "yarn.lock"));
+}
+
+function runBuild() {
+    const packageManagerName = checkIfYarn() ? "yarn" : "npm";
+    execSync(`${packageManagerName} run build`, { "stdio": [0, 1, 2] });
+    copyFiles("dist", "docs", function() {
+        console.log("Build Complete.");
+        const pathToBuild = "dist";
+        rimraf(pathToBuild, function() {
+            const filesToInclude = ["CNAME", "favicon.ico", "404.html"];
+            filesToInclude.forEach((file) => {
+                if (fs.existsSync(file)) {
+                    copyFiles(file, `docs/${file}`);
+                }
+            });
+            editForProduction();
+        });
+    });
+}
+
+if (fs.existsSync("docs")) {
+    const pathToDocs = "docs";
+    rimraf(pathToDocs, function() {
         runBuild();
     });
 } else {
