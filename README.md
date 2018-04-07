@@ -18,6 +18,28 @@ Alternatively, with yarn:
 
     "deploy": "node ./node_modules/vue-gh-pages/index.js"
 
+#### Step 2.5: If you are using the 'webpack-simple' template, you will need to do a couple extra things: 
+##### First, make sure the build.js is referenced correctly.
+
+You can do this in one of two ways:
+
+1.) Change the path from the index.html in the root of your project from 
+    <script src="/dist/build.js"></script> 
+to 
+    <script src="build.js"></script>
+
+2.) Add to your package.json:
+    "wst": "/dist/"
+Making sure the path is the same path from the index.html path to build.js. Though this should be the default, so unless it was modified the above should work.
+
+##### Second, modify your 'webpack.config.js' and change the 'publicPath' for the output to the empty string: 
+        output: {
+            ...
+            publicPath: '',
+            ...
+        },
+This will make sure your files are referenced correctly after building.
+ 
 ### Step 3: Add `homepage` field to your `package.json` file:
 This will automatically push your builds to github.
 
