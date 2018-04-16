@@ -1,0 +1,8 @@
+#24
+It seems like this is more of an issue of what git repo to be pushing to.
+
+Maybe specify an absolute path to 'cd' to before doing github nonsense
+
+All they need to do is specify where they want to put the docs folder.
+
+Absolute path/relative path, idc
