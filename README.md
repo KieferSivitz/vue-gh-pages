@@ -35,7 +35,7 @@ yarn add vue-gh-pages
 
   
 
-"deploy": "node ./node_modules/vue-gh-pages/index.js"
+"deploy": "node ./node_modules/vue-gh-pages/index.js ../ gh-pages"
 
   
 

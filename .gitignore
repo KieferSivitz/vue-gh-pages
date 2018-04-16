@@ -4,6 +4,7 @@ node_modules
 .eslintrc.json
 
 # debug
+notes.txt
 npm-debug.log
 
 # lock

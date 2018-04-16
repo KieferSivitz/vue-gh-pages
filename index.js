@@ -15,9 +15,9 @@ const rimraf = require('rimraf');
 console.time('Deployment Time');
 
 function pushToGhPages() {
-    ghpages.publish('docs', {
-            'branch': 'master',
-            'dest': 'docs',
+    ghpages.publish(outputDirectory, {
+            'branch': branch,
+            'dest': (branch === 'master') ? 'docs' : '',
             'repo': repository + '.git'
         },
         function(error) {
@@ -27,13 +27,12 @@ function pushToGhPages() {
                 return console.error(error);
             }
             console.log('The production build is ready and has been pushed to gh-pages branch.');
-            removeDocsDirectory();
         }
     );
 }
 
 function removeDocsDirectory(){
-    rimraf('docs', function(){
+    rimraf(outputDirectory, function(){
         console.log('________________________________________________________________________________________________________');
         console.log('Deployment complete. Check Master branch for docs directory.  The local docs directory has been removed.');
         console.log('‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾');
@@ -55,10 +54,10 @@ function copyFiles(originalFile, newFile, callback) {
 
 function editForProduction() {
     console.log('Preparing files for github pages');
-    if (!fs.existsSync('docs/index.html')) {
-        fs.createReadStream('index.html').pipe(fs.createWriteStream('docs/index.html'));
+    if (!fs.existsSync(outputDirectory + '/index.html')) {
+        fs.createReadStream('index.html').pipe(fs.createWriteStream(outputDirectory + '/index.html'));
     } 
-    fs.readFile('docs/index.html', 'utf-8', function(error, data) {
+    fs.readFile(outputDirectory + '/index.html', 'utf-8', function(error, data) {
         if (error) {
             return console.error(error);
         }
@@ -67,7 +66,7 @@ function editForProduction() {
         if (webpackSimpleTemplate) {
             removeWebpackSimpleTemplate = data.replace(webpackSimpleTemplate, '');
         } 
-        fs.writeFileSync('docs/index.html', removeWebpackSimpleTemplate);
+        fs.writeFileSync(outputDirectory + '/index.html', removeWebpackSimpleTemplate);
         if (repository !== null) {
             pushToGhPages();
         }
@@ -81,24 +80,34 @@ function checkIfYarn() {
 function runBuild() {
     const packageManagerName = checkIfYarn() ? 'yarn' : 'npm';
     execSync(`${packageManagerName} run build`, { 'stdio': [0, 1, 2] });
-    copyFiles('dist', 'docs', function() {
+    copyFiles('dist', path.resolve(outputDirectory), function() {
         console.log('Build Complete.');
         const pathToBuild = 'dist';
         rimraf(pathToBuild, function() {
             const filesToInclude = ['CNAME', 'favicon.ico', '404.html'];
             filesToInclude.forEach((file) => {
                 if (fs.existsSync(file)) {
-                    copyFiles(file, `docs/${file}`);
+                    copyFiles(file, outputDirectory + `/${file}`);
                 }
             });
             editForProduction();
         });
     });
 }
+let args = process.argv.slice(2);
+let outputDirectory = 'docs';
+let branch = 'master';
+args.forEach(function (val, index) {
+    if(index === 0) {
+        outputDirectory = val;
+    }
+    if(index === 1) {
+        branch = val;
+    }
+});
 
-if (fs.existsSync('docs')) {
-    const pathToDocs = 'docs';
-    rimraf(pathToDocs, function() {
+if (fs.existsSync(outputDirectory)) {
+    rimraf(outputDirectory, function() {
         runBuild();
     });
 } else {
