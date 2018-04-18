@@ -124,3 +124,11 @@ Examples:
 	node ./node_modules/vue-gh-pages/index.js -o C:\Users\MyUser\Documents\Folder
 
 	node ./node_modules/vue-gh-pages/index.js --output ../DeleteMe
+
+
+##### If you would like to preserve the docs folder after pushing to Github:
+Use the command line argument 
+	-p
+
+Examples:
+	node ./node_modules/vue-gh-pages/index.js -p

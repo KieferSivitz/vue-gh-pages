@@ -29,7 +29,9 @@ function pushToGhPages() {
                 return console.error(error);
             }
             console.log(`The production build is ready and has been pushed to the remote branch.`);
-            removeDocsDirectory();
+            if (!preserveDocs) {
+                removeDocsDirectory();
+            }
         }
     );
 }
@@ -98,6 +100,7 @@ function runBuild() {
     });
 }
 let outputDirectory = argv['output'] || argv['o'] || '';
+let preserveDocs = argv['preserve'] || argv['p'] || '';
 outputDirectory = `${outputDirectory}/docs`;
 
 if (fs.existsSync(outputDirectory)) {
