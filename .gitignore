@@ -8,7 +8,6 @@ notes.txt
 npm-debug.log
 
 # lock
-package-lock.json
 yarn.lock
 
 # swap

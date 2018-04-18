@@ -16,8 +16,8 @@ console.time('Deployment Time');
 
 function pushToGhPages() {
     ghpages.publish(outputDirectory, {
-            'branch': branch,
-            'dest': (branch === 'master') ? 'docs' : '',
+            'branch': 'master',
+            'dest': 'docs',
             'repo': repository + '.git'
         },
         function(error) {
@@ -27,6 +27,7 @@ function pushToGhPages() {
                 return console.error(error);
             }
             console.log('The production build is ready and has been pushed to gh-pages branch.');
+            removeDocsDirectory();
         }
     );
 }
@@ -95,7 +96,7 @@ function runBuild() {
     });
 }
 let args = process.argv.slice(2);
-let outputDirectory = 'docs';
+let outputDirectory = '';
 let branch = 'master';
 args.forEach(function (val, index) {
     if(index === 0) {
@@ -105,6 +106,7 @@ args.forEach(function (val, index) {
         branch = val;
     }
 });
+outputDirectory = `${outputDirectory}/docs`;
 
 if (fs.existsSync(outputDirectory)) {
     rimraf(outputDirectory, function() {
