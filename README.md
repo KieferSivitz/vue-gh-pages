@@ -121,6 +121,6 @@ You can use either a relative path or an absolute path.
 
 Examples:
 
-	node ./node_modules/vue-gh-pages/index.js -o C:\\Users\\MyUser\\Documents\\Folder
+	node ./node_modules/vue-gh-pages/index.js -o C:\Users\MyUser\Documents\Folder
 
 	node ./node_modules/vue-gh-pages/index.js --output ../DeleteMe
