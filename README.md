@@ -109,13 +109,13 @@ This may happen as a result of node_modules filenames being overly verbose.
   
   
 
-##### If you would like to change the output directory of the docs folder
+#### If you would like to change the output directory of the docs folder
 You can use the command line argument 
 
 	--output <path-to-file> 
 
 	or 
-	
+
 	-o <path-to-file>
 
 to specify the output directory for the docs folder.
@@ -129,7 +129,7 @@ Examples:
 	node ./node_modules/vue-gh-pages/index.js --output ../DeleteMe
 
 
-##### If you would like to preserve the docs folder after pushing to Github:
+#### If you would like to preserve the docs folder after pushing to Github:
 Use the command line argument 
 
 	-p
