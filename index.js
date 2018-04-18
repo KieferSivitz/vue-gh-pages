@@ -11,22 +11,24 @@ const path = require('path');
 const repository = packageJson['homepage'] || null;
 const webpackSimpleTemplate = packageJson['wst'] || null;
 const rimraf = require('rimraf');
+const argv = require('minimist')(process.argv.slice(2));
 
 console.time('Deployment Time');
 
 function pushToGhPages() {
-    ghpages.publish(outputDirectory, {
+    let publishOptions = {
             'branch': 'master',
             'dest': 'docs',
             'repo': repository + '.git'
-        },
+        }
+    ghpages.publish(outputDirectory, publishOptions,
         function(error) {
             if (error) {
                 console.log('Push to remote failed, please double check that the homepage field in your package.json links to the correct repository.');
                 console.log('The build has completed but has not been pushed to github.');
                 return console.error(error);
             }
-            console.log('The production build is ready and has been pushed to gh-pages branch.');
+            console.log(`The production build is ready and has been pushed to the remote branch.`);
             removeDocsDirectory();
         }
     );
@@ -95,17 +97,7 @@ function runBuild() {
         });
     });
 }
-let args = process.argv.slice(2);
-let outputDirectory = '';
-let branch = 'master';
-args.forEach(function (val, index) {
-    if(index === 0) {
-        outputDirectory = val;
-    }
-    if(index === 1) {
-        branch = val;
-    }
-});
+let outputDirectory = argv['output'] || argv['o'] || '';
 outputDirectory = `${outputDirectory}/docs`;
 
 if (fs.existsSync(outputDirectory)) {
