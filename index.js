@@ -11,29 +11,31 @@ const path = require('path');
 const repository = packageJson['homepage'] || null;
 const webpackSimpleTemplate = packageJson['wst'] || null;
 const rimraf = require('rimraf');
+const argv = require('minimist')(process.argv.slice(2));
 
 console.time('Deployment Time');
 
 function pushToGhPages() {
-    ghpages.publish('docs', {
+    let publishOptions = {
             'branch': 'master',
             'dest': 'docs',
             'repo': repository + '.git'
-        },
+        }
+    ghpages.publish(outputDirectory, publishOptions,
         function(error) {
             if (error) {
                 console.log('Push to remote failed, please double check that the homepage field in your package.json links to the correct repository.');
                 console.log('The build has completed but has not been pushed to github.');
                 return console.error(error);
             }
-            console.log('The production build is ready and has been pushed to gh-pages branch.');
+            console.log(`The production build is ready and has been pushed to the remote branch.`);
             removeDocsDirectory();
         }
     );
 }
 
 function removeDocsDirectory(){
-    rimraf('docs', function(){
+    rimraf(outputDirectory, function(){
         console.log('________________________________________________________________________________________________________');
         console.log('Deployment complete. Check Master branch for docs directory.  The local docs directory has been removed.');
         console.log('‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾');
@@ -55,10 +57,10 @@ function copyFiles(originalFile, newFile, callback) {
 
 function editForProduction() {
     console.log('Preparing files for github pages');
-    if (!fs.existsSync('docs/index.html')) {
-        fs.createReadStream('index.html').pipe(fs.createWriteStream('docs/index.html'));
+    if (!fs.existsSync(outputDirectory + '/index.html')) {
+        fs.createReadStream('index.html').pipe(fs.createWriteStream(outputDirectory + '/index.html'));
     } 
-    fs.readFile('docs/index.html', 'utf-8', function(error, data) {
+    fs.readFile(outputDirectory + '/index.html', 'utf-8', function(error, data) {
         if (error) {
             return console.error(error);
         }
@@ -67,7 +69,7 @@ function editForProduction() {
         if (webpackSimpleTemplate) {
             removeWebpackSimpleTemplate = data.replace(webpackSimpleTemplate, '');
         } 
-        fs.writeFileSync('docs/index.html', removeWebpackSimpleTemplate);
+        fs.writeFileSync(outputDirectory + '/index.html', removeWebpackSimpleTemplate);
         if (repository !== null) {
             pushToGhPages();
         }
@@ -81,24 +83,25 @@ function checkIfYarn() {
 function runBuild() {
     const packageManagerName = checkIfYarn() ? 'yarn' : 'npm';
     execSync(`${packageManagerName} run build`, { 'stdio': [0, 1, 2] });
-    copyFiles('dist', 'docs', function() {
+    copyFiles('dist', path.resolve(outputDirectory), function() {
         console.log('Build Complete.');
         const pathToBuild = 'dist';
         rimraf(pathToBuild, function() {
             const filesToInclude = ['CNAME', 'favicon.ico', '404.html'];
             filesToInclude.forEach((file) => {
                 if (fs.existsSync(file)) {
-                    copyFiles(file, `docs/${file}`);
+                    copyFiles(file, outputDirectory + `/${file}`);
                 }
             });
             editForProduction();
         });
     });
 }
+let outputDirectory = argv['output'] || argv['o'] || '';
+outputDirectory = `${outputDirectory}/docs`;
 
-if (fs.existsSync('docs')) {
-    const pathToDocs = 'docs';
-    rimraf(pathToDocs, function() {
+if (fs.existsSync(outputDirectory)) {
+    rimraf(outputDirectory, function() {
         runBuild();
     });
 } else {
