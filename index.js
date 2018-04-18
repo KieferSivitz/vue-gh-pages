@@ -101,7 +101,11 @@ function runBuild() {
 }
 let outputDirectory = argv['output'] || argv['o'] || '';
 let preserveDocs = argv['preserve'] || argv['p'] || '';
-outputDirectory = `${outputDirectory}/docs`;
+if (outputDirectory === '') {
+    outputDirectory = `docs`;
+} else {
+    outputDirectory = `${outputDirectory}/docs`;
+}
 
 if (fs.existsSync(outputDirectory)) {
     rimraf(outputDirectory, function() {
