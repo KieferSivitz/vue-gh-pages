@@ -132,4 +132,18 @@ This may happen as a result of node_modules filenames being overly verbose.
   
   
 
-That's it!
+##### If you would like to change the output directory of the docs folder
+You can use the command line argument 
+	--output <path-to-file> 
+	or 
+	-o <path-to-file>
+	
+to specify the output directory for the docs folder.
+
+You can use either a relative path or an absolute path.
+
+Examples:
+
+	node ./node_modules/vue-gh-pages/index.js -o C:\\Users\\MyUser\\Documents\\Folder
+
+	node ./node_modules/vue-gh-pages/index.js --output ../DeleteMe
