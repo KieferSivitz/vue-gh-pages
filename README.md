@@ -9,41 +9,25 @@
 
 ## vue-gh-pages
 
-  
-
 Since I could not find a clean way of deploying vue-cli apps to github pages, I made this one.
 
-  
 
 ### Step 1: Install the module:
 
-  
+	npm install --save-dev vue-gh-pages
 
-npm install --save-dev vue-gh-pages
-
-  
 
 Alternatively, with yarn:
 
-  
-
-yarn add vue-gh-pages
-
-  
+	yarn add vue-gh-pages
 
 ### Step 2: Add the following to the script section of your package.json:
 
-  
-
-"deploy": "node ./node_modules/vue-gh-pages/index.js"
-
-  
+	"deploy": "node ./node_modules/vue-gh-pages/index.js"
 
 #### Step 2.5: If you are using the 'webpack-simple' template, you will need to do a couple extra things:
 
 ##### First, make sure the build.js is referenced correctly.
-
-  
 
 You can do this in one of two ways:
 
@@ -63,15 +47,15 @@ to
 
 ##### Second, modify your 'webpack.config.js' and change the 'publicPath' for the output to the empty string:
 
-output: {
+	output: {
 
-...
+	...
 
-publicPath: '',
+	publicPath: '',
 
-...
+	...
 
-},
+	},
 
 This will make sure your files are referenced correctly after building.
 
@@ -81,7 +65,7 @@ This will automatically push your builds to github.
 
   
 
-"homepage": "https://github.com/myusername/my-app",
+	"homepage": "https://github.com/myusername/my-app",
 
   
 
@@ -89,7 +73,7 @@ If you are using ssh you will need to add the ssh link instead:
 
   
 
-"homepage": "git@github.com:myusername/my-app
+	"homepage": "git@github.com:myusername/my-app
 
   
 
@@ -97,23 +81,18 @@ If this is left off you will have to commit and push the changes manually.
 
   
 
-### Step 4: Now when you're ready to push to github, run:
+### Step 4: Now when you're ready to push to github, run:  
 
-  
-
-npm run deploy
-
-  
-
+	npm run deploy
+ 
 This will create an optimized production build of your project ready for github pages.
 
-  
 
 ### Step 5: Finally, if this is your first commit to gh-pages, go to your repository's settings on github, scroll down to the gh-pages section and change the source to:
 
   
 
-master branch /docs folder
+	master branch /docs folder
 
   
 
@@ -121,11 +100,9 @@ master branch /docs folder
 
 (May need administrator privileges)
 
-  
 
-git config --system core.longpaths true
-
-  
+	git config --system core.longpaths true
+ 
 
 This may happen as a result of node_modules filenames being overly verbose.
 
@@ -137,7 +114,7 @@ You can use the command line argument
 	--output <path-to-file> 
 	or 
 	-o <path-to-file>
-	
+
 to specify the output directory for the docs folder.
 
 You can use either a relative path or an absolute path.
