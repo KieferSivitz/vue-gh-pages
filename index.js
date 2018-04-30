@@ -16,26 +16,24 @@ const argv = require('minimist')(process.argv.slice(2));
 console.time('Deployment Time');
 
 function pushToGhPages() {
-    rimraf('node_modules/gh-pages/.cache', function(){
-        let publishOptions = {
-                'branch': destinationBranch,
-                'dest': 'docs',
-                'repo': repository + '.git'
+    let publishOptions = {
+            'branch': branch,
+            'dest': 'docs',
+            'repo': repository + '.git'
+        }
+    ghpages.publish(outputDirectory, publishOptions,
+        function(error) {
+            if (error) {
+                console.log('Push to remote failed, please double check that the homepage field in your package.json links to the correct repository.');
+                console.log('The build has completed but has not been pushed to github.');
+                return console.error(error);
             }
-        ghpages.publish(outputDirectory, publishOptions,
-            function(error) {
-                if (error) {
-                    console.log('Push to remote failed, please double check that the homepage field in your package.json links to the correct repository.');
-                    console.log('The build has completed but has not been pushed to github.');
-                    return console.error(error);
-                }
-                console.log(`The production build is ready and has been pushed to the remote branch.`);
-                if (!preserveDocs) {
-                    removeDocsDirectory();
-                }
+            console.log(`The production build is ready and has been pushed to the remote branch.`);
+            if (!preserveDocs) {
+                removeDocsDirectory();
             }
-        );
-    })
+        }
+    );
 }
 
 function removeDocsDirectory(){
@@ -85,7 +83,7 @@ function checkIfYarn() {
 }
 
 function runBuild() {
-    packageManagerName = checkIfYarn() ? 'yarn' : 'npm';
+    const packageManagerName = checkIfYarn() ? 'yarn' : 'npm';
     execSync(`${packageManagerName} run build`, { 'stdio': [0, 1, 2] });
     copyFiles('dist', path.resolve(outputDirectory), function() {
         console.log('Build Complete.');
@@ -101,17 +99,19 @@ function runBuild() {
         });
     });
 }
-let packageManagerName = 'npm';
 let outputDirectory = argv['output'] || argv['o'] || '';
 let preserveDocs = argv['preserve'] || argv['p'] || '';
 let destinationBranch = argv['branch'] || argv['b'] || '';
-if (destinationBranch === '') {
-    destinationBranch = 'master';
+if (branch === '') {
+    branch = 'master';
 }
-if (outputDirectory === '') {
-    outputDirectory = `docs`;
-} else {
-    outputDirectory = `${outputDirectory}/docs`;
+if (branch === 'master') {
+    if (outputDirectory === '') {
+        outputDirectory = `docs`;
+    } else {
+        outputDirectory = `${outputDirectory}/docs`;
+    }
+
 }
 
 if (fs.existsSync(outputDirectory)) {
