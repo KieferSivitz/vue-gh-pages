@@ -137,3 +137,19 @@ Use the command line argument
 Examples:
 
 	node ./node_modules/vue-gh-pages/index.js -p
+
+
+#### If you would like to push to the gh-pages branch:
+Use the command line argument 
+
+	--branch <branch> 
+
+	or 
+
+	-b <branch>
+
+Examples:
+
+	node ./node_modules/vue-gh-pages/index.js -b gh-pages
+
+	node ./node_modules/vue-gh-pages/index.js --branch gh-pages
