@@ -19,9 +19,15 @@ function pushToGhPages() {
     rimraf('node_modules/gh-pages/.cache', function(){
         let publishOptions = {
                 'branch': destinationBranch,
-                'dest': 'docs',
+                'dest': `docs`,
                 'repo': repository + '.git'
+        }
+        if (destinationBranch === 'gh-pages') {
+            publishOptions = {
+                    'branch': destinationBranch,
+                    'repo': repository + '.git'
             }
+        }
         ghpages.publish(outputDirectory, publishOptions,
             function(error) {
                 if (error) {
@@ -108,7 +114,7 @@ let destinationBranch = argv['branch'] || argv['b'] || '';
 if (destinationBranch === '') {
     destinationBranch = 'master';
 }
-if (outputDirectory === '') {
+if (destinationBranch === 'master') {
     outputDirectory = `docs`;
 } else {
     outputDirectory = `${outputDirectory}/docs`;
