@@ -22,7 +22,7 @@ function pushToGhPages() {
                 'dest': `docs`,
                 'repo': repository + '.git'
         }
-        if (destinationBranch === 'gh-pages') {
+        if (destinationBranch === 'gh-pages' || githubLocation !== '') {
             publishOptions = {
                     'branch': destinationBranch,
                     'repo': repository + '.git'
@@ -111,6 +111,7 @@ let packageManagerName = 'npm';
 let outputDirectory = argv['output'] || argv['o'] || '';
 let preserveDocs = argv['preserve'] || argv['p'] || '';
 let destinationBranch = argv['branch'] || argv['b'] || '';
+let githubLocation = argv['remote-root'] || argv['r'] || '';
 if (destinationBranch === '') {
     destinationBranch = 'master';
 }
