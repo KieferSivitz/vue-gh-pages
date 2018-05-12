@@ -5,6 +5,8 @@
 
 [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/kiefersivitz)
 
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/kiefersivitz/vue-gh-pages.svg)](http://isitmaintained.com/project/kiefersivitz/vue-gh-pages "Average time to resolve an issue")
+
   
 
 ## vue-gh-pages
