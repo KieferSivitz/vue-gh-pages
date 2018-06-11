@@ -36,7 +36,7 @@ function pushToGhPages() {
                     return console.error(error);
                 }
                 console.log(`The production build is ready and has been pushed to the remote branch.`);
-                if (preserveDocs !== -1) {
+                if (preserveDocs === -1) {
                     removeDocsDirectory();
                 }
             }
