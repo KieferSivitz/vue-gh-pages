@@ -36,7 +36,7 @@ function pushToGhPages() {
                     return console.error(error);
                 }
                 console.log(`The production build is ready and has been pushed to the remote branch.`);
-                if (!preserveDocs) {
+                if (preserveDocs !== -1) {
                     removeDocsDirectory();
                 }
             }
@@ -108,16 +108,14 @@ function runBuild() {
     });
 }
 let packageManagerName = 'npm';
-let outputDirectory = argv['output'] || argv['o'] || '';
-let preserveDocs = argv['preserve'] || argv['p'] || '';
+let outputDirectory = argv['output'] || argv['o'] || 'docs';
+let preserveDocs = argv['preserve'] || argv['p'] || -1;
 let destinationBranch = argv['branch'] || argv['b'] || '';
 let githubLocation = argv['remote-root'] || argv['r'] || '';
 if (destinationBranch === '') {
     destinationBranch = 'master';
 }
-if (destinationBranch === 'master') {
-    outputDirectory = `docs`;
-} else {
+if (outputDirectory !== 'docs') {
     outputDirectory = `${outputDirectory}/docs`;
 }
 
