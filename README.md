@@ -1,10 +1,7 @@
 
 [![npm version](https://badge.fury.io/js/vue-gh-pages.svg)](https://www.npmjs.com/package/vue-gh-pages)
 
-[![Percentage of issues still open](http://isitmaintained.com/badge/open/kiefersivitz/vue-gh-pages.svg)](http://isitmaintained.com/project/kiefersivitz/vue-gh-pages "Percentage of issues still open")
-
 [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/kiefersivitz)
-
   
 
 ## vue-gh-pages
