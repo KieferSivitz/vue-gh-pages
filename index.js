@@ -6,8 +6,8 @@ const execSync = require('child_process').execSync;
 const fs = require('fs');
 const ghpages = require('gh-pages');
 const ncp = require('ncp').ncp;
-const packageJson = require('../../package.json');
 const path = require('path');
+const packageJson = require(path.resolve('./package.json'));
 const repository = packageJson['homepage'] || null;
 const webpackSimpleTemplate = packageJson['wst'] || null;
 const rimraf = require('rimraf');
@@ -16,7 +16,7 @@ const argv = require('minimist')(process.argv.slice(2));
 console.time('Deployment Time');
 
 function pushToGhPages() {
-    rimraf('node_modules/gh-pages/.cache', function(){
+    rimraf(path.resolve('node_modules/gh-pages/.cache'), function(){
         let publishOptions = {
                 'branch': destinationBranch,
                 'dest': `docs`,
@@ -67,10 +67,11 @@ function copyFiles(originalFile, newFile, callback) {
 
 function editForProduction() {
     console.log('Preparing files for github pages');
-    if (!fs.existsSync(outputDirectory + '/index.html')) {
-        fs.createReadStream('index.html').pipe(fs.createWriteStream(outputDirectory + '/index.html'));
+    const indexPath = path.resolve(outputDirectory + '/index.html');
+    if (!fs.existsSync(indexPath)) {
+        fs.createReadStream(path.resolve('index.html')).pipe(fs.createWriteStream(indexPath));
     } 
-    fs.readFile(outputDirectory + '/index.html', 'utf-8', function(error, data) {
+    fs.readFile(indexPath, 'utf-8', function(error, data) {
         if (error) {
             return console.error(error);
         }
@@ -79,7 +80,7 @@ function editForProduction() {
         if (webpackSimpleTemplate) {
             removeWebpackSimpleTemplate = data.replace(webpackSimpleTemplate, '');
         } 
-        fs.writeFileSync(outputDirectory + '/index.html', removeWebpackSimpleTemplate);
+        fs.writeFileSync(indexPath, removeWebpackSimpleTemplate);
         if (repository !== null) {
             pushToGhPages();
         }
