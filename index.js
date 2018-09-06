@@ -20,12 +20,14 @@ function pushToGhPages() {
         let publishOptions = {
                 'branch': destinationBranch,
                 'dest': `docs`,
-                'repo': repository + '.git'
+                'repo': repository + '.git',
+                'message': commitMessage
         }
         if (destinationBranch === 'gh-pages' || githubLocation !== '') {
             publishOptions = {
                     'branch': destinationBranch,
-                    'repo': repository + '.git'
+                    'repo': repository + '.git',
+                    'message': commitMessage
             }
         }
         ghpages.publish(outputDirectory, publishOptions,
@@ -113,6 +115,7 @@ let outputDirectory = argv['output'] || argv['o'] || 'docs';
 let preserveDocs = argv['preserve'] || argv['p'] || -1;
 let destinationBranch = argv['branch'] || argv['b'] || '';
 let githubLocation = argv['remote-root'] || argv['r'] || '';
+let commitMessage = argv['message'] || argv['m'] || 'Update';
 if (destinationBranch === '') {
     destinationBranch = 'master';
 }
