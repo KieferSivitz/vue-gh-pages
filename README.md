@@ -150,3 +150,17 @@ Examples:
 	node ./node_modules/vue-gh-pages/index.js -b gh-pages
 
 	node ./node_modules/vue-gh-pages/index.js --branch gh-pages
+
+
+#### If you would like to specify the commit message:
+Use the command line argument
+
+    --message <message>
+
+	or
+
+	-m <message>
+
+Examples:
+
+    node ./node_modules/vue-gh-pages/index.js -m "deploy to gh-pages"
