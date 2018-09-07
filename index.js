@@ -1,80 +1,130 @@
 #!/usr/bin/env node
-let ncp = require('ncp').ncp;
-let fs = require('fs');
-let execSync = require('child_process').execSync;
-let rimraf = require('rimraf');
-let ghpages = require('gh-pages');
-let path = require('path');
-let packageJson = require('../../package.json');
-let repository = packageJson['homepage'] || null;
 
-function pushToGhPages () {
-    ghpages.publish('docs', {
-        branch: 'master',
-        dest: 'docs',
-        repo: repository + '.git'
-    },
-    function (err) {
-        if (err) {
-            console.log('Push to remote failed, please double check that the homepage field in your package.json links to the correct repository.');
-            console.log('The build has completed but has not been pushed to github.');
-            return console.error(err);
-        } else {
-            console.log('Finished! production build is ready for gh-pages');
-            console.log('Pushed to gh-pages branch');
+'use strict';
+
+const execSync = require('child_process').execSync;
+const fs = require('fs');
+const ghpages = require('gh-pages');
+const ncp = require('ncp').ncp;
+const path = require('path');
+const packageJson = require(path.resolve('./package.json'));
+const repository = packageJson['homepage'] || null;
+const webpackSimpleTemplate = packageJson['wst'] || null;
+const rimraf = require('rimraf');
+const argv = require('minimist')(process.argv.slice(2));
+
+console.time('Deployment Time');
+
+function pushToGhPages() {
+    rimraf(path.resolve('node_modules/gh-pages/.cache'), function(){
+        let publishOptions = {
+                'branch': destinationBranch,
+                'dest': `docs`,
+                'repo': repository + '.git',
+                'message': commitMessage
+        }
+        if (destinationBranch === 'gh-pages' || githubLocation !== '') {
+            publishOptions = {
+                    'branch': destinationBranch,
+                    'repo': repository + '.git',
+                    'message': commitMessage
+            }
+        }
+        ghpages.publish(outputDirectory, publishOptions,
+            function(error) {
+                if (error) {
+                    console.log('Push to remote failed, please double check that the homepage field in your package.json links to the correct repository.');
+                    console.log('The build has completed but has not been pushed to github.');
+                    return console.error(error);
+                }
+                console.log(`The production build is ready and has been pushed to the remote branch.`);
+                if (preserveDocs === -1) {
+                    removeDocsDirectory();
+                }
+            }
+        );
+    })
+}
+
+function removeDocsDirectory(){
+    rimraf(outputDirectory, function(){
+        console.log('________________________________________________________________________________________________________');
+        console.log('Deployment complete. Check Master branch for docs directory.  The local docs directory has been removed.');
+        console.log('‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾');
+        console.timeEnd('Deployment Time');
+    })
+}
+
+function copyFiles(originalFile, newFile, callback) {
+    ncp.limit = 16;
+    ncp(originalFile, newFile, function(error) {
+        if (error) {
+            return console.error(error);
+        }
+        if (typeof(callback) !== 'undefined') {
+            return callback();
         }
     });
 }
 
-function copyFiles (originalFile, newFile, callback) {
-    ncp.limit = 16;
-    ncp(originalFile, newFile, function (err) {
-        if (err) { return console.error(err); }
-        if (typeof(callback) !== "undefined") { callback(); }
-    });
-}
-
-function editForProduction () {
+function editForProduction() {
     console.log('Preparing files for github pages');
-
-    fs.readFile('docs/index.html', 'utf-8', function (err, data) {
-        if (err) { return console.error(err); }
-
-        let replace_href_and_src_tags = data.replace(/(src|href)=\//g, '$1=');
-        fs.writeFileSync('docs/index.html', replace_href_and_src_tags);
-
-        if (repository !== null) { pushToGhPages(); }
+    const indexPath = path.resolve(outputDirectory + '/index.html');
+    if (!fs.existsSync(indexPath)) {
+        fs.createReadStream(path.resolve('index.html')).pipe(fs.createWriteStream(indexPath));
+    } 
+    fs.readFile(indexPath, 'utf-8', function(error, data) {
+        if (error) {
+            return console.error(error);
+        }
+        const removeLeadingSlash = data.replace(/(src|href)=\//g, '$1=');
+        let removeWebpackSimpleTemplate = removeLeadingSlash;
+        if (webpackSimpleTemplate) {
+            removeWebpackSimpleTemplate = data.replace(webpackSimpleTemplate, '');
+        } 
+        fs.writeFileSync(indexPath, removeWebpackSimpleTemplate);
+        if (repository !== null) {
+            pushToGhPages();
+        }
     });
 }
 
-function checkIfYarn () {
+function checkIfYarn() {
     return fs.existsSync(path.resolve('./' || process.cwd(), 'yarn.lock'));
 }
 
-function runBuild () {
-    const packageManagerName = checkIfYarn() ? 'yarn' : 'npm';
-
-    execSync(`${packageManagerName} run build`, {stdio:[0,1,2]});
-
-    copyFiles('dist', 'docs', function () {
+function runBuild() {
+    packageManagerName = checkIfYarn() ? 'yarn' : 'npm';
+    execSync(`${packageManagerName} run build`, { 'stdio': [0, 1, 2] });
+    copyFiles('dist', path.resolve(outputDirectory), function() {
         console.log('Build Complete.');
         const pathToBuild = 'dist';
-        rimraf(pathToBuild, function () {
-            if (fs.existsSync('CNAME')) {
-                copyFiles('CNAME', 'docs/CNAME');
-            }
-            if (fs.existsSync('404.html')) {
-                copyFiles('404.html', 'docs/404.html');
-            }
+        rimraf(pathToBuild, function() {
+            const filesToInclude = ['CNAME', 'favicon.ico', '404.html'];
+            filesToInclude.forEach((file) => {
+                if (fs.existsSync(file)) {
+                    copyFiles(file, outputDirectory + `/${file}`);
+                }
+            });
             editForProduction();
         });
     });
 }
+let packageManagerName = 'npm';
+let outputDirectory = argv['output'] || argv['o'] || 'docs';
+let preserveDocs = argv['preserve'] || argv['p'] || -1;
+let destinationBranch = argv['branch'] || argv['b'] || '';
+let githubLocation = argv['remote-root'] || argv['r'] || '';
+let commitMessage = argv['message'] || argv['m'] || 'Update';
+if (destinationBranch === '') {
+    destinationBranch = 'master';
+}
+if (outputDirectory !== 'docs') {
+    outputDirectory = `${outputDirectory}/docs`;
+}
 
-if (fs.existsSync('docs')) {
-    const pathToDocs = 'docs';
-
-    rimraf(pathToDocs, function () {
+if (fs.existsSync(outputDirectory)) {
+    rimraf(outputDirectory, function() {
         runBuild();
     });
 } else {
