@@ -1,8 +1,8 @@
-
-[![npm version](https://badge.fury.io/js/vue-gh-pages.svg)](https://www.npmjs.com/package/vue-gh-pages)
-
 [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/kiefersivitz)
-  
+[![](https://data.jsdelivr.com/v1/package/npm/vue-gh-pages/badge)](https://www.jsdelivr.com/package/npm/vue-gh-pages)
+[npm-downloads.svg]: https://img.shields.io/npm/dm/vue-gh-pages.svg
+[npm.link]: https://www.npmjs.com/package/vue-gh-pages
+[![npm version](https://badge.fury.io/js/vue-gh-pages.svg)](https://www.npmjs.com/package/vue-gh-pages)
 
 ## vue-gh-pages
 
